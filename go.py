@@ -1,5 +1,5 @@
 mysearch = "gribble+pl"
-retmax = 2
+retmax = 10
 
 import urllib
 from lxml import etree
@@ -53,7 +53,26 @@ for i in range(retmax):
 		authorlist[j]['initials'] = authorsXML[j].find("Initials").text
 	articleList[i]['authors'] = authorlist
 
-print articleList
+
+def printArticle(articleDict):
+	printstr = ""
+	for author in articleDict['authors']:
+		printstr += author['lastname'] + " " + author['initials'] + ", "
+	printstr = printstr[:-2] + " "
+	printstr += "(" + articleDict['year'] + ") "
+	printstr += articleDict['title'] + " "
+	printstr += articleDict['journal_abbrev'] + " "
+	if 'volume' in articleDict.keys():
+		if type(articleDict['volume']) is str:
+			printstr += articleDict['volume'] + ":"
+	if 'pages' in articleDict.keys():
+		if type(articleDict['pages']) is str:
+			printstr += articleDict['pages']
+	return printstr
+
+print "\n"
+for article in articleList:
+	print printArticle(article) + "\n"
 
 
 
